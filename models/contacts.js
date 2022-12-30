@@ -28,7 +28,7 @@ const listContacts = async () => {
     const contacts = await readDataFromDB();
     return contacts;
   } catch (err) {
-    err.info = "Get all contacts reques failed";
+    err.info = "Get all contacts failed";
     return err;
   }
 };
@@ -36,12 +36,22 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
   try {
     const contacts = await readDataFromDB();
-    const askedContact = contacts.find(
-      (c) => c.id.toString() === contactId.toString()
-    );
-    return askedContact;
+    return contacts.find(({ id }) => id.toString() === contactId.toString());
   } catch (err) {
-    err.info = "Get contact by ID request failed";
+    err.error = "Get contact by ID failed";
+    return err;
+  }
+};
+
+const addContact = async (body) => {
+  try {
+    const newContact = { id: nanoid(), ...body };
+    const contacts = await readDataFromDB();
+    contacts.push(newContact);
+    await writeDataToDB(contacts);
+    return newContact;
+  } catch (err) {
+    err.info = "Add contact failed";
     return err;
   }
 };
@@ -60,21 +70,7 @@ const removeContact = async (contactId) => {
     await writeDataToDB(updatedContacts);
     return removedContact;
   } catch (err) {
-    err.info = "Delete contact request failed";
-    return err;
-  }
-};
-
-const addContact = async (body) => {
-  try {
-    const newContactId = nanoid();
-    const newContact = { id: newContactId, ...body };
-    const contacts = await readDataFromDB();
-    contacts.push(newContact);
-    await writeDataToDB(contacts);
-    return newContact;
-  } catch (err) {
-    err.info = "Add contact request failed";
+    err.info = "Delete contact failed";
     return err;
   }
 };
@@ -95,7 +91,7 @@ const updateContact = async (contactId, body) => {
 
     return askedContact;
   } catch (err) {
-    err.info = "Update contact request failed";
+    err.info = "Update contact failed";
     return err;
   }
 };
