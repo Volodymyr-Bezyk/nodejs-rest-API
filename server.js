@@ -2,8 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
-
 require("dotenv").config();
+
 const logger = require("morgan");
 const routerApi = require("./api/index");
 const { errorHandler, wrongPathHandler } = require("./helpers");
@@ -20,7 +20,7 @@ app.use((_, res, __) => wrongPathHandler(_, res, __));
 app.use((err, _, res, __) => errorHandler(err, _, res, __));
 
 const uriDb = process.env.DB_HOST;
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const connection = mongoose.connect(uriDb, {
   dbName: "db-contacts",
