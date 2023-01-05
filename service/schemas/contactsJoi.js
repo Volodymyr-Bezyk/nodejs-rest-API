@@ -7,4 +7,11 @@ const contactSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-module.exports = { contactSchema };
+const updateContactSchema = Joi.object({
+  name: Joi.string().alphanum().min(4).max(20),
+  email: Joi.string().email({ minDomainSegments: 2 }),
+  phone: Joi.string().max(12),
+  favorite: Joi.boolean().required(),
+});
+
+module.exports = { contactSchema, updateContactSchema };

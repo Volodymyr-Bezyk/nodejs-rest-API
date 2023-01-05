@@ -1,26 +1,32 @@
 const express = require("express");
 const router = express.Router();
-const ctrlContacts = require("../controller");
+const {
+  getContacts,
+  getContactById,
+  addContact,
+  updateContact,
+  deleteContact,
+  replaceContact,
+} = require("../controller");
 const { validateBody } = require("../middlewares/validateBody");
-const { contactSchema } = require("../service/schemas/contactsJoi");
+const {
+  contactSchema,
+  updateContactSchema,
+} = require("../service/schemas/contactsJoi");
 const { tryCatchWrap } = require("../helpers");
 
-router.get("/contacts", tryCatchWrap(ctrlContacts.getContacts));
-router.get("/contacts/:id", tryCatchWrap(ctrlContacts.getContactById));
-router.post(
-  "/contacts",
-  validateBody(contactSchema),
-  tryCatchWrap(ctrlContacts.addContact)
-);
-router.delete("/contacts/:id", tryCatchWrap(ctrlContacts.deleteContact));
+router.get("/contacts", tryCatchWrap(getContacts));
+router.get("/contacts/:id", tryCatchWrap(getContactById));
+router.post("/contacts", validateBody(contactSchema), tryCatchWrap(addContact));
+router.delete("/contacts/:id", tryCatchWrap(deleteContact));
 router.put(
   "/contacts/:id",
   validateBody(contactSchema),
-  tryCatchWrap(ctrlContacts.replaceContact)
+  tryCatchWrap(replaceContact)
 );
 router.patch(
   "/contacts/:id/favorite",
-  validateBody(contactSchema),
-  tryCatchWrap(ctrlContacts.updateContact)
+  validateBody(updateContactSchema),
+  tryCatchWrap(updateContact)
 );
 module.exports = router;
