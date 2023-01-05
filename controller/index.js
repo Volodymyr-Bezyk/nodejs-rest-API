@@ -48,9 +48,6 @@ const replaceContact = async (req, res, next) => {
 };
 
 const updateContact = async (req, res, next) => {
-  // if (req.body.favorite === undefined)
-  //   return res.status(400).json({ message: "missing field favorite" });
-
   const contact = await updateStatusContactController(req.params.id, req.body);
 
   if (!contact) return res.status(404).json({ " message ": " Not found " });
