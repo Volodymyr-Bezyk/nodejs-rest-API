@@ -1,5 +1,40 @@
-const app = require('./app')
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", true);
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+require("dotenv").config();
+const logger = require("morgan");
+const routerApi = require("./api/index");
+const { errorHandler, wrongPathHandler } = require("./helpers");
+
+const app = express();
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+app.use(logger(formatsLogger));
+app.use(cors());
+app.use(express.json());
+
+app.use("/api", routerApi);
+
+app.use((_, res, __) => wrongPathHandler(_, res, __));
+app.use((err, _, res, __) => errorHandler(err, _, res, __));
+
+const uriDb = process.env.DB_HOST;
+const PORT = 3000;
+
+const connection = mongoose.connect(uriDb, {
+  dbName: "db-contacts",
+});
+
+connection
+  .then(() => {
+    app.listen(PORT, function () {
+      console.log(
+        `Database connection successful. Use our API on port: ${PORT}`
+      );
+    });
+  })
+  .catch((err) => {
+    console.log(`Server not running. Error message: ${err.message}`);
+    process.exit(1);
+  });
