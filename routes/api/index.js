@@ -7,14 +7,14 @@ const {
   updateContact,
   deleteContact,
   replaceContact,
-} = require("../controller");
+} = require("../../controller/api");
 
-const { validateBody } = require("../middlewares/validateBody");
+const { validateBody } = require("../../middlewares/validateBody");
 const {
   contactSchema,
   updateContactSchema,
-} = require("../service/schemas/contactsJoi");
-const { tryCatchWrap } = require("../helpers");
+} = require("../../service/schemas/contactsJoi");
+const { tryCatchWrap } = require("../../helpers");
 
 router.get("/contacts", tryCatchWrap(getContacts));
 router.get("/contacts/:id", tryCatchWrap(getContactById));

@@ -5,7 +5,7 @@ const {
   deleteContactController,
   replaceContactController,
   updateStatusContactController,
-} = require("../service/index");
+} = require("../../service/api/index");
 
 const getContacts = async (_, res, next) => {
   const contacts = await getContactsController();
