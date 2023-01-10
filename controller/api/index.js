@@ -31,8 +31,6 @@ const addContactController = async (req, res, next) => {
 
 const deleteContactController = async (req, res, next) => {
   const contact = await deleteContact(req.params.id, req.owner._id);
-  console.log(req.owner._id);
-  console.log(contact);
   if (!contact)
     return res.status(404).json({ message: `Not found id: ${req.params.id}` });
 
