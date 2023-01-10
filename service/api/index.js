@@ -1,25 +1,27 @@
 const Contact = require("../schemas/contact");
 
-const getContactsController = async () => Contact.find();
+const getContacts = async (owner) => await Contact.find({ owner });
 
-const getContactByIdController = async (id) => Contact.findOne({ _id: id });
+const getContactById = async (id, owner) =>
+  await Contact.findOne({ _id: id, owner });
 
-const addContactController = async (fields) => Contact.create(fields);
+const addContact = async (fields, owner) =>
+  await Contact.create({ ...fields, owner });
 
-const deleteContactController = async (id) =>
-  Contact.findByIdAndRemove({ _id: id });
+const deleteContact = async (id, owner) =>
+  await Contact.findOneAndRemove({ _id: id, owner });
 
-const replaceContactController = async (id, fields) =>
-  Contact.findOneAndReplace({ _id: id }, fields);
+const replaceContact = async (id, owner, fields) =>
+  await Contact.findOneAndReplace({ _id: id, owner }, { ...fields, owner });
 
-const updateStatusContactController = async (id, fields) =>
-  Contact.findByIdAndUpdate({ _id: id }, fields, { new: true });
+const updateStatusContact = async (id, owner, fields) =>
+  await Contact.findOneAndUpdate({ _id: id, owner }, fields, { new: true });
 
 module.exports = {
-  getContactsController,
-  getContactByIdController,
-  addContactController,
-  deleteContactController,
-  replaceContactController,
-  updateStatusContactController,
+  getContacts,
+  getContactById,
+  addContact,
+  deleteContact,
+  replaceContact,
+  updateStatusContact,
 };

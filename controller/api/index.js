@@ -1,19 +1,20 @@
 const {
-  getContactsController,
-  getContactByIdController,
-  addContactController,
-  deleteContactController,
-  replaceContactController,
-  updateStatusContactController,
+  getContacts,
+  getContactById,
+  addContact,
+  deleteContact,
+  replaceContact,
+  updateStatusContact,
 } = require("../../service/api/index");
 
-const getContacts = async (_, res, next) => {
-  const contacts = await getContactsController();
+const getContactsController = async (req, res, next) => {
+  const contacts = await getContacts(req.owner._id);
+
   return res.status(200).json({ contacts });
 };
 
-const getContactById = async (req, res, next) => {
-  const contact = await getContactByIdController(req.params.id);
+const getContactByIdController = async (req, res, next) => {
+  const contact = await getContactById(req.params.id, req.owner._id);
   if (!contact)
     return res.status(404).json({
       message: `Not found id: ${req.params.id}`,
@@ -22,14 +23,16 @@ const getContactById = async (req, res, next) => {
   return res.status(200).json({ contact });
 };
 
-const addContact = async (req, res, next) => {
-  const contact = await addContactController(req.body);
+const addContactController = async (req, res, next) => {
+  const contact = await addContact(req.body, req.owner._id);
 
   return res.status(201).json({ contact });
 };
 
-const deleteContact = async (req, res, next) => {
-  const contact = await deleteContactController(req.params.id);
+const deleteContactController = async (req, res, next) => {
+  const contact = await deleteContact(req.params.id, req.owner._id);
+  console.log(req.owner._id);
+  console.log(contact);
   if (!contact)
     return res.status(404).json({ message: `Not found id: ${req.params.id}` });
 
@@ -38,8 +41,8 @@ const deleteContact = async (req, res, next) => {
     .json({ message: "Contact deleted", deletedContact: contact });
 };
 
-const replaceContact = async (req, res, next) => {
-  const contact = await replaceContactController(req.params.id, req.body);
+const replaceContactController = async (req, res, next) => {
+  const contact = await replaceContact(req.params.id, req.owner._id, req.body);
 
   if (!contact) return res.status(404).json({ " message ": " Not found " });
   return res
@@ -47,8 +50,12 @@ const replaceContact = async (req, res, next) => {
     .json({ message: "contact replaced", replacedContact: contact });
 };
 
-const updateContact = async (req, res, next) => {
-  const contact = await updateStatusContactController(req.params.id, req.body);
+const updateContactController = async (req, res, next) => {
+  const contact = await updateStatusContact(
+    req.params.id,
+    req.owner._id,
+    req.body
+  );
 
   if (!contact) return res.status(404).json({ " message ": " Not found " });
   return res
@@ -57,10 +64,10 @@ const updateContact = async (req, res, next) => {
 };
 
 module.exports = {
-  getContacts,
-  getContactById,
-  addContact,
-  updateContact,
-  deleteContact,
-  replaceContact,
+  getContactsController,
+  getContactByIdController,
+  addContactController,
+  updateContactController,
+  deleteContactController,
+  replaceContactController,
 };

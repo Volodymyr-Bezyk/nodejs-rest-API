@@ -1,3 +1,4 @@
+const { func } = require("joi");
 const { Schema, model } = require("mongoose");
 
 const contact = new Schema(
@@ -5,9 +6,8 @@ const contact = new Schema(
     name: {
       type: String,
       required: [true, "Set name for contact"],
-      unique: true,
-      index: 1,
     },
+
     email: {
       type: String,
       required: true,

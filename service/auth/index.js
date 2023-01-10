@@ -2,8 +2,7 @@ const User = require("../schemas/user");
 
 const registerUser = async (fields) => await User.create(fields);
 
-const loginUser = async (email, options) =>
-  await User.findOne({ email }, options);
+const loginUser = async (email) => await User.findOne({ email });
 
 module.exports = {
   registerUser,

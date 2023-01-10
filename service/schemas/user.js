@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 const bcrypt = require("bcryptjs");
-const { func } = require("joi");
 
 const user = new Schema(
   {
@@ -23,6 +22,12 @@ const user = new Schema(
   { versionKey: false, timestamps: true }
 );
 
+user.methods.userData = function () {
+  return {
+    email: this.email,
+    subscription: this.subscription,
+  };
+};
 user.pre("save", async function (next) {
   try {
     if (!this.isNew) return next();

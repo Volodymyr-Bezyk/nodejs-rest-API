@@ -6,15 +6,13 @@ const errorHandler = (error, _, res, __) => {
     return res.status(400).json({
       code: error.code,
       message: "Validation error. Joi error or another library error",
+      info: error.message,
     });
 
-  // error.name === "CastError" ||
   if (error.code === 11000)
     return res.status(409).json({
       message: "Email in use",
     });
-
-  console.log(error);
 
   return res.status(error.status ?? 500).json({
     status: "fail",
