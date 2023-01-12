@@ -5,7 +5,8 @@ mongoose.set("strictQuery", true);
 require("dotenv").config();
 
 const logger = require("morgan");
-const routerApi = require("./api/index");
+const routerApi = require("./routes/api/index");
+const routerRegister = require("./routes/auth");
 const { errorHandler, wrongPathHandler } = require("./helpers");
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+app.use("/api", routerRegister);
 app.use("/api", routerApi);
 
 app.use((_, res, __) => wrongPathHandler(_, res, __));

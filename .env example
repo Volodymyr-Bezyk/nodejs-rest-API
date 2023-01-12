@@ -1,0 +1,3 @@
+DB_HOST=mongodb+srv://mongodb:mongodb@cluster0.fnhgdji.mongodb.net/?retryWrites=true&w=majority
+PORT=3000
+JWT_SECRET=jklnaldkKLAHJBFDjknkads65465asdDAasd
