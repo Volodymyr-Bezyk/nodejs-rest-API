@@ -15,7 +15,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/users", routerRegister);
+app.use("/api", routerRegister);
 app.use("/api", routerApi);
 
 app.use((_, res, __) => wrongPathHandler(_, res, __));

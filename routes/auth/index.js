@@ -9,6 +9,7 @@ const {
 } = require("../../controller/auth");
 const {
   userRegSchema,
+  userLoginSchema,
   userUpdateSchema,
 } = require("../../service/schemas/userJoi");
 const { validateBody } = require("../../middlewares/validateBody");
@@ -16,22 +17,21 @@ const { tryCatchWrap } = require("../../helpers");
 const { checkJwt } = require("../../middlewares/checkJWT");
 
 router.post(
-  "/register",
+  "/users/register",
   validateBody(userRegSchema),
   tryCatchWrap(registrationController)
 );
-
 router.post(
-  "/login",
-  validateBody(userRegSchema),
+  "/users/login",
+  validateBody(userLoginSchema),
   tryCatchWrap(loginController)
 );
 
-router.post("/logout", checkJwt, tryCatchWrap(logOutController));
-router.post("/current", checkJwt, tryCatchWrap(currentUserController));
+router.use(checkJwt);
+router.post("/users/logout", tryCatchWrap(logOutController));
+router.post("/users/current", tryCatchWrap(currentUserController));
 router.patch(
-  "/",
-  checkJwt,
+  "/users/",
   validateBody(userUpdateSchema),
   tryCatchWrap(updateUserStatusController)
 );

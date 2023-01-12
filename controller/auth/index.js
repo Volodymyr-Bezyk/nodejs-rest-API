@@ -43,8 +43,8 @@ const currentUserController = async (req, res, next) => {
 };
 
 const updateUserStatusController = async (req, res, next) => {
-  await updateUserStatus(req.owner._id, req.body);
-
+  const updatedUser = await updateUserStatus(req.owner._id, req.body);
+  if (!updatedUser) return res.status(400).json({ message: "User not found" });
   return res.status(200).json({ message: "User status updated" });
 };
 

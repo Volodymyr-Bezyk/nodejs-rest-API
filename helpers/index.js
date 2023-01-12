@@ -32,4 +32,8 @@ const wrongPathHandler = (_, res, __) =>
     data: "Not found",
   });
 
-module.exports = { tryCatchWrap, errorHandler, wrongPathHandler };
+module.exports = {
+  tryCatchWrap,
+  errorHandler,
+  wrongPathHandler,
+};
