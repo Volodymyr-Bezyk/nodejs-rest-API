@@ -2,7 +2,11 @@ const tryCatchWrap = (someFunc) => async (req, res, next) =>
   await someFunc(req, res, next).catch((err) => next(err));
 
 const errorHandler = (error, _, res, __) => {
-  if (error.name === "ValidationError" || error.isJoi)
+  if (
+    error.name === "ValidationError" ||
+    error.name === "CastError" ||
+    error.isJoi
+  )
     return res.status(400).json({
       code: error.code,
       message: "Validation error. Joi error or another library error",

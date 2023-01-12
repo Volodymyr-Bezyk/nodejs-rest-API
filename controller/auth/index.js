@@ -1,7 +1,12 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const { registerUser, loginUser, findUser } = require("../../service/auth");
+const {
+  registerUser,
+  loginUser,
+  findUser,
+  updateUserStatus,
+} = require("../../service/auth");
 
 const registrationController = async (req, res, next) => {
   const user = await registerUser(req.body);
@@ -37,9 +42,16 @@ const currentUserController = async (req, res, next) => {
   return res.status(200).json({ user: user.userData() });
 };
 
+const updateUserStatusController = async (req, res, next) => {
+  await updateUserStatus(req.owner._id, req.body);
+
+  return res.status(200).json({ message: "User status updated" });
+};
+
 module.exports = {
   registrationController,
   loginController,
   logOutController,
   currentUserController,
+  updateUserStatusController,
 };

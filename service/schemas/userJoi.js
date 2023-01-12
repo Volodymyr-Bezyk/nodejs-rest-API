@@ -7,4 +7,8 @@ const userRegSchema = Joi.object({
   token: Joi.string(),
 });
 
-module.exports = userRegSchema;
+const userUpdateSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
+module.exports = { userRegSchema, userUpdateSchema };

@@ -14,7 +14,7 @@ const {
   contactSchema,
   updateContactSchema,
   replaceContactSchema,
-} = require("../../service/schemas/contactsJoi");
+} = require("../../service/schemas/contactJoi");
 const { tryCatchWrap } = require("../../helpers");
 const { checkJwt } = require("../../middlewares/checkJWT");
 

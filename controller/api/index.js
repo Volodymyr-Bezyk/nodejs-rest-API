@@ -8,8 +8,11 @@ const {
 } = require("../../service/api/index");
 
 const getContactsController = async (req, res, next) => {
-  const contacts = await getContacts(req.owner._id);
+  const { page = 1, limit = 20, favorite } = req.query;
+  const pageLimit = +limit > 20 ? 20 : +limit;
+  const skip = +limit * +page - +limit;
 
+  const contacts = await getContacts(req.owner._id, skip, pageLimit, favorite);
   return res.status(200).json({ contacts });
 };
 
