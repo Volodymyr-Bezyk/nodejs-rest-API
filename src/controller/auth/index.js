@@ -15,9 +15,14 @@ const registrationController = async (req, res, next) => {
 
 const loginController = async (req, res, next) => {
   const user = await loginUser(req.body.email);
-
-  if (!user || !(await bcrypt.compare(req.body.password, user.password)))
+  if (!user) {
     return res.status(401).json({ message: "Email or password is wrong" });
+  }
+
+  const verifyPassword = await bcrypt.compare(req.body.password, user.password);
+  if (!verifyPassword) {
+    return res.status(401).json({ message: "Email or password is wrong" });
+  }
 
   user.token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "1h",
@@ -29,7 +34,9 @@ const loginController = async (req, res, next) => {
 
 const logOutController = async (req, res, next) => {
   const user = await findUser(req.owner._id);
-  if (!user) return res.status(401).json({ message: "Not authorized" });
+  if (!user) {
+    return res.status(401).json({ message: "Not authorized" });
+  }
 
   user.token = "";
   await user.save();
@@ -38,13 +45,17 @@ const logOutController = async (req, res, next) => {
 
 const currentUserController = async (req, res, next) => {
   const user = await findUser(req.owner._id);
-  if (!user) return res.status(401).json({ message: "Not authorized" });
+  if (!user) {
+    return res.status(401).json({ message: "Not authorized" });
+  }
   return res.status(200).json({ user: user.userData() });
 };
 
 const updateUserStatusController = async (req, res, next) => {
   const updatedUser = await updateUserStatus(req.owner._id, req.body);
-  if (!updatedUser) return res.status(400).json({ message: "User not found" });
+  if (!updatedUser) {
+    return res.status(400).json({ message: "User not found" });
+  }
   return res.status(200).json({ message: "User status updated" });
 };
 

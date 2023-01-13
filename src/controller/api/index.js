@@ -18,10 +18,11 @@ const getContactsController = async (req, res, next) => {
 
 const getContactByIdController = async (req, res, next) => {
   const contact = await getContactById(req.params.id, req.owner._id);
-  if (!contact)
+  if (!contact) {
     return res.status(404).json({
       message: `Not found id: ${req.params.id}`,
     });
+  }
 
   return res.status(200).json({ contact });
 };
@@ -34,8 +35,9 @@ const addContactController = async (req, res, next) => {
 
 const deleteContactController = async (req, res, next) => {
   const contact = await deleteContact(req.params.id, req.owner._id);
-  if (!contact)
+  if (!contact) {
     return res.status(404).json({ message: `Not found id: ${req.params.id}` });
+  }
 
   return res
     .status(200)
@@ -45,7 +47,9 @@ const deleteContactController = async (req, res, next) => {
 const replaceContactController = async (req, res, next) => {
   const contact = await replaceContact(req.params.id, req.owner._id, req.body);
 
-  if (!contact) return res.status(404).json({ " message ": " Not found " });
+  if (!contact) {
+    return res.status(404).json({ " message ": " Not found " });
+  }
   return res
     .status(200)
     .json({ message: "contact replaced", replacedContact: contact });
@@ -58,7 +62,9 @@ const updateContactController = async (req, res, next) => {
     req.body
   );
 
-  if (!contact) return res.status(404).json({ " message ": " Not found " });
+  if (!contact) {
+    return res.status(404).json({ " message ": " Not found " });
+  }
   return res
     .status(200)
     .json({ message: "contact updated", updatedContact: contact });
