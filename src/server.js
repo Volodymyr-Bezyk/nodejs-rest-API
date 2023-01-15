@@ -2,10 +2,11 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const logger = require("morgan");
-const routerApi = require("./routes/api/index");
+const routerApi = require("./routes/api");
 const routerRegister = require("./routes/auth");
 const routerFiles = require("./routes/files");
 const { errorHandler, wrongPathHandler } = require("./helpers");
