@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 
 const {
   registerUser,
@@ -10,6 +11,8 @@ const {
 
 const registrationController = async (req, res, next) => {
   const user = await registerUser(req.body);
+  user.avatarURL = gravatar.url(user.email, { s: 250 }, { protocol: "http" });
+  await user.save();
   return res.status(201).json({ user: user.userData() });
 };
 
