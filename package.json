@@ -6,7 +6,9 @@
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./src/server.js",
     "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "lint:fix": "eslint --fix **/*.js",
+    "test": "jest",
+    "test:cover": "jest --coverage --coverageDirectory='coverage'"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

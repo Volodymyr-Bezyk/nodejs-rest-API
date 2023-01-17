@@ -3,7 +3,9 @@ const { findUser } = require("../service/auth/index");
 
 const checkJwt = (req, res, next) => {
   try {
-    if (!req.headers.authorization) {
+    const { authorization } = req.headers;
+
+    if (!authorization) {
       return res.status(401).json({ message: "Not authorized" });
     }
 
