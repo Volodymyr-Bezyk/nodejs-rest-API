@@ -1,22 +1,30 @@
 const User = require("../schemas/user");
 
 const registerUser = async (fields) => {
-  return await User.create(fields);
+  try {
+    return await User.create(fields);
+  } catch (error) {}
 };
 
 const loginUser = async (email) => {
-  return await User.findOne({ email });
+  try {
+    return await User.findOne({ email });
+  } catch (error) {}
 };
 
 const findUser = async (_id) => {
-  return await User.findById({ _id });
+  try {
+    return await User.findById({ _id });
+  } catch (error) {}
 };
 
 const updateUserStatus = async (id, statusField) => {
-  return await User.findOneAndUpdate({ _id: id }, statusField, {
-    new: true,
-    runValidators: true,
-  });
+  try {
+    return await User.findOneAndUpdate({ _id: id }, statusField, {
+      new: true,
+      runValidators: true,
+    });
+  } catch (error) {}
 };
 
 module.exports = {
