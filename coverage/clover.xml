@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1674049169264" clover="3.2.0">
-  <project timestamp="1674049169264" name="All files">
-    <metrics statements="355" coveredstatements="342" conditionals="64" coveredconditionals="63" methods="23" coveredmethods="22" elements="442" coveredelements="427" complexity="0" loc="355" ncloc="355" packages="6" files="7" classes="7"/>
+<coverage generated="1674056994182" clover="3.2.0">
+  <project timestamp="1674056994182" name="All files">
+    <metrics statements="372" coveredstatements="359" conditionals="67" coveredconditionals="66" methods="24" coveredmethods="23" elements="463" coveredelements="448" complexity="0" loc="372" ncloc="372" packages="7" files="8" classes="8"/>
     <package name="controller.api">
       <metrics statements="80" coveredstatements="80" conditionals="18" coveredconditionals="17" methods="6" coveredmethods="6"/>
       <file name="index.js" path="E:\GoIT\Github\nodejs-rest-API\src\controller\api\index.js">
@@ -130,15 +130,15 @@
         <line num="36" count="1" type="stmt"/>
         <line num="37" count="1" type="stmt"/>
         <line num="38" count="1" type="cond" truecount="1" falsecount="0"/>
-        <line num="39" count="3" type="stmt"/>
+        <line num="39" count="3" type="cond" truecount="1" falsecount="0"/>
         <line num="40" count="3" type="cond" truecount="1" falsecount="0"/>
         <line num="41" count="1" type="stmt"/>
-        <line num="42" count="1" type="cond" truecount="1" falsecount="0"/>
-        <line num="43" count="2" type="stmt"/>
-        <line num="44" count="2" type="stmt"/>
-        <line num="45" count="2" type="stmt"/>
-        <line num="46" count="2" type="stmt"/>
-        <line num="47" count="2" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
         <line num="48" count="1" type="stmt"/>
         <line num="49" count="1" type="cond" truecount="1" falsecount="0"/>
         <line num="50" count="3" type="cond" truecount="1" falsecount="0"/>
@@ -163,6 +163,29 @@
         <line num="69" count="1" type="stmt"/>
         <line num="70" count="1" type="stmt"/>
         <line num="71" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="controller.files">
+      <metrics statements="17" coveredstatements="17" conditionals="3" coveredconditionals="3" methods="1" coveredmethods="1"/>
+      <file name="index.js" path="E:\GoIT\Github\nodejs-rest-API\src\controller\files\index.js">
+        <metrics statements="17" coveredstatements="17" conditionals="3" coveredconditionals="3" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="5" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
       </file>
     </package>
     <package name="middlewares">
@@ -288,10 +311,10 @@
         <line num="13" count="4" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
         <line num="15" count="1" type="cond" truecount="1" falsecount="0"/>
-        <line num="16" count="9" type="stmt"/>
-        <line num="17" count="9" type="stmt"/>
-        <line num="18" count="9" type="cond" truecount="1" falsecount="0"/>
-        <line num="19" count="9" type="stmt"/>
+        <line num="16" count="11" type="stmt"/>
+        <line num="17" count="11" type="stmt"/>
+        <line num="18" count="11" type="cond" truecount="1" falsecount="0"/>
+        <line num="19" count="11" type="stmt"/>
         <line num="20" count="1" type="stmt"/>
         <line num="21" count="1" type="cond" truecount="1" falsecount="0"/>
         <line num="22" count="3" type="stmt"/>

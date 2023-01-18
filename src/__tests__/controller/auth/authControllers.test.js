@@ -30,7 +30,10 @@ describe("Test auth controllers", () => {
       password: "$2a$10$9TRUf0jRxkLgAv55smmvXuKoqAbZ5xgXpSqAnkAHmOKvE6FCOxhZi",
       token,
       save: jest.fn(() => mUser),
-      userData: jest.fn(() => mUser),
+      userData: jest.fn(() => ({
+        email: "replex@gmail.com",
+        subscription: "starter",
+      })),
     };
     mReq = {
       headers: {
@@ -43,7 +46,7 @@ describe("Test auth controllers", () => {
       owner: {},
     };
     mRes = { status: jest.fn(() => mRes), json: jest.fn((msg) => msg) };
-    mNext = jest.fn();
+    mNext = jest.fn(() => {});
 
     createUserServiceSpy = User["create"] = jest.fn(() => mUser);
     findOneServiceSpy = User["findOne"] = jest.fn(() => mUser);
@@ -66,13 +69,18 @@ describe("Test auth controllers", () => {
 
   test("should loginController return token", async () => {
     mUser.token = "";
-    await loginController(mReq, mRes, mNext);
+    const result = await loginController(mReq, mRes, mNext);
 
     await expect(findOneServiceSpy).toBeCalled();
     expect(mUser.save).toBeCalled();
     expect(mUser.token).toBeDefined();
     expect(mRes.status).toHaveBeenCalledWith(200);
     expect(mRes.json).toHaveBeenCalled();
+    expect(result.token).toBeDefined();
+    expect(typeof result.token).toBe("string");
+    expect(typeof result.user).toBe("object");
+    expect(typeof result.user.email).toBe("string");
+    expect(typeof result.user.subscription).toBe("string");
   });
 
   test("should loginController call 401 response if user not found", async () => {
@@ -127,8 +135,7 @@ describe("Test auth controllers", () => {
 
   test("should logOutController catch Error without params", async () => {
     try {
-      await logOutController(mReq, mRes, mNext);
-      throw new Error();
+      await logOutController();
     } catch (error) {
       expect(error).toBeInstanceOf(Error);
     }
