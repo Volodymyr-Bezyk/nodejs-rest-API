@@ -1,51 +1,30 @@
 const Contact = require("../schemas/contact");
 
-const getContacts = async (owner, skip, pageLimit, favorite) => {
-  try {
-    return await Contact.find({
-      owner,
-      $or: [{ favorite: favorite ?? true }, { favorite: favorite ?? false }],
-    })
-      .skip(skip)
-      .limit(pageLimit);
-  } catch (error) {}
-};
+const getContacts = async (owner, skip, pageLimit, favorite) =>
+  await Contact.find({
+    owner,
+    $or: [{ favorite: favorite ?? true }, { favorite: favorite ?? false }],
+  })
+    .skip(skip)
+    .limit(pageLimit);
 
-const getContactById = async (id, owner) => {
-  try {
-    return await Contact.findOne({ _id: id, owner });
-  } catch (error) {}
-};
+const getContactById = async (id, owner) =>
+  await Contact.findOne({ _id: id, owner });
 
-const addContact = async (fields, owner) => {
-  try {
-    return await Contact.create({ ...fields, owner });
-  } catch (error) {}
-};
+const addContact = async (fields, owner) =>
+  await Contact.create({ ...fields, owner });
 
-const deleteContact = async (id, owner) => {
-  try {
-    return await Contact.findOneAndRemove({ _id: id, owner });
-  } catch (error) {}
-};
+const deleteContact = async (id, owner) =>
+  await Contact.findOneAndRemove({ _id: id, owner });
 
-const replaceContact = async (id, owner, fields) => {
-  try {
-    return await Contact.findOneAndReplace(
-      { _id: id, owner },
-      { ...fields, owner }
-    );
-  } catch (error) {}
-};
+const replaceContact = async (id, owner, fields) =>
+  await Contact.findOneAndReplace({ _id: id, owner }, { ...fields, owner });
 
-const updateStatusContact = async (id, owner, fields) => {
-  try {
-    return await Contact.findOneAndUpdate({ _id: id, owner }, fields, {
-      new: true,
-      runValidators: true,
-    });
-  } catch (error) {}
-};
+const updateStatusContact = async (id, owner, fields) =>
+  await Contact.findOneAndUpdate({ _id: id, owner }, fields, {
+    new: true,
+    runValidators: true,
+  });
 
 module.exports = {
   getContacts,

@@ -9,15 +9,15 @@ const {
 } = require("../../../controller/api");
 
 describe("Test api controllers", () => {
-  let mReq;
-  let mRes;
-  let mNext;
-  let getAllContactsServiceSpy;
-  let getOneContactServiceSpy;
-  let addContactServiceSpy;
-  let deleteContactServiceSpy;
-  let replaceContactServiceSpy;
-  let updateStatusContactServiceSpy;
+  let mReq,
+    mRes,
+    mNext,
+    getAllContactsServiceSpy,
+    getOneContactServiceSpy,
+    addContactServiceSpy,
+    deleteContactServiceSpy,
+    replaceContactServiceSpy,
+    updateStatusContactServiceSpy;
 
   beforeEach(() => {
     mReq = {
@@ -26,7 +26,6 @@ describe("Test api controllers", () => {
         email: "replex@gmail.com",
         password: "1333444",
       },
-      owner: {},
       query: {},
       params: {
         id: "",
@@ -36,9 +35,14 @@ describe("Test api controllers", () => {
     mRes = { status: jest.fn(() => mRes), json: jest.fn((msg) => msg) };
     mNext = jest.fn();
 
-    getAllContactsServiceSpy = Contact["find"] = jest.fn(() => ({
-      contacts: [],
-    }));
+    getAllContactsServiceSpy = jest
+      .spyOn(Contact, "find")
+      .mockImplementationOnce(() => ({
+        skip: () => ({
+          limit: () => ({ contacts: [] }),
+        }),
+      }));
+
     getOneContactServiceSpy = Contact["findOne"] = jest.fn(() => ({
       contact: {},
     }));

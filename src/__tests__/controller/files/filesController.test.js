@@ -2,11 +2,7 @@ const User = require("../../../service/schemas/user");
 const { uploadUserAvatarController } = require("../../../controller/files");
 
 describe("Test files controller", () => {
-  let mUser;
-  let mReq;
-  let mRes;
-  let mNext;
-  let findByIdServiceSpy;
+  let mUser, mReq, mRes, mNext, findByIdServiceSpy;
 
   beforeEach(() => {
     mUser = {

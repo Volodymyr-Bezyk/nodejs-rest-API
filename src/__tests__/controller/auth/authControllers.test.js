@@ -10,15 +10,15 @@ const {
 } = require("../../../controller/auth");
 
 describe("Test auth controllers", () => {
-  let token;
-  let mUser;
-  let mReq;
-  let mRes;
-  let mNext;
-  let createUserServiceSpy;
-  let findOneServiceSpy;
-  let findByIdServiceSpy;
-  let findOneAndUpdateServiceSpy;
+  let token,
+    mUser,
+    mReq,
+    mRes,
+    mNext,
+    createUserServiceSpy,
+    findOneServiceSpy,
+    findByIdServiceSpy,
+    findOneAndUpdateServiceSpy;
 
   beforeEach(() => {
     token = jwt.sign(
