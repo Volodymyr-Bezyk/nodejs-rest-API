@@ -3,18 +3,26 @@ const { findUser } = require("../service/auth/index");
 
 const checkJwt = (req, res, next) => {
   try {
-    const token = req.headers.authorization
-      ? req.headers.authorization.split(" ")[1]
-      : null;
+    const { authorization } = req.headers;
 
-    if (!token) return res.status(401).json({ message: "Not authorized" });
+    if (!authorization) {
+      return res.status(401).json({ message: "Not authorized" });
+    }
+
+    const [, token] = req.headers.authorization.split(" ");
+    if (!token) {
+      return res.status(401).json({ message: "Not authorized" });
+    }
 
     jwt.verify(token, process.env.JWT_SECRET, async function (err, userData) {
-      if (err) return res.status(401).json({ message: "Not authorized" });
+      if (err) {
+        return res.status(401).json({ message: "Not authorized" });
+      }
 
       const user = await findUser(userData._id);
-      if (!user || user.token !== token)
+      if (!user || user.token !== token) {
         return res.status(401).json({ message: "Not authorized" });
+      }
 
       req.owner = userData;
       next();

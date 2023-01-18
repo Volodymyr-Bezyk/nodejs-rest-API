@@ -6,29 +6,25 @@ const getContacts = async (owner, skip, pageLimit, favorite) =>
     $or: [{ favorite: favorite ?? true }, { favorite: favorite ?? false }],
   })
     .skip(skip)
-    .limit(pageLimit)
-    .catch((e) => e);
+    .limit(pageLimit);
 
 const getContactById = async (id, owner) =>
-  await Contact.findOne({ _id: id, owner }).catch((e) => e);
+  await Contact.findOne({ _id: id, owner });
 
 const addContact = async (fields, owner) =>
-  await Contact.create({ ...fields, owner }).catch((e) => e);
+  await Contact.create({ ...fields, owner });
 
 const deleteContact = async (id, owner) =>
-  await Contact.findOneAndRemove({ _id: id, owner }).catch((e) => e);
+  await Contact.findOneAndRemove({ _id: id, owner });
 
 const replaceContact = async (id, owner, fields) =>
-  await Contact.findOneAndReplace(
-    { _id: id, owner },
-    { ...fields, owner }
-  ).catch((e) => e);
+  await Contact.findOneAndReplace({ _id: id, owner }, { ...fields, owner });
 
 const updateStatusContact = async (id, owner, fields) =>
   await Contact.findOneAndUpdate({ _id: id, owner }, fields, {
     new: true,
     runValidators: true,
-  }).catch((e) => e);
+  });
 
 module.exports = {
   getContacts,

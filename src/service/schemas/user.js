@@ -18,6 +18,7 @@ const user = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
+    avatarURL: String,
     token: String,
   },
   { versionKey: false, timestamps: true }
@@ -31,7 +32,9 @@ user.methods.userData = function () {
 };
 user.pre("save", async function (next) {
   try {
-    if (!this.isNew) return next();
+    if (!this.isNew) {
+      return next();
+    }
     this.password = await bcrypt.hash(this.password, 10);
   } catch (error) {
     next(error);

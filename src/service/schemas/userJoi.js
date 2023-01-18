@@ -5,6 +5,7 @@ const userRegSchema = Joi.object({
   password: Joi.string().alphanum().min(6).required(),
   subscription: Joi.string(),
   token: Joi.string(),
+  avatarURL: Joi.string(),
 });
 
 const userLoginSchema = Joi.object({
