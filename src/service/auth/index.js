@@ -9,9 +9,20 @@ const updateUserStatus = async (id, statusField) =>
     runValidators: true,
   });
 
+const verifyUser = async (verificationToken) =>
+  await User.findOneAndUpdate(
+    { verificationToken },
+    { verify: true },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
 module.exports = {
   registerUser,
   loginUser,
   findUser,
   updateUserStatus,
+  verifyUser,
 };

@@ -39,8 +39,24 @@ const wrongPathHandler = (_, res, __) =>
     data: "Not found",
   });
 
+const createMessageToVerifacation = (req, verificationToken) => ({
+  to: req.body.email,
+  from: "epf.volodymyr@gmail.com",
+  subject: "Please verify your account",
+  text: `To confirm your email please click on the link ${
+    req.protocol
+  }://${req.get("host")}/api/users/verify/${verificationToken}`,
+
+  html: `<p>To confirm your email please click on the <strong><a href='${
+    req.protocol
+  }://${req.get("host")}/api/users/verify/${
+    req.body.verificationToken
+  }'>link</a></strong></p>`,
+});
+
 module.exports = {
   tryCatchWrap,
   errorHandler,
   wrongPathHandler,
+  createMessageToVerifacation,
 };
