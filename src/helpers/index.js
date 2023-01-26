@@ -1,3 +1,6 @@
+const sgMail = require("@sendgrid/mail");
+require("dotenv").config();
+
 const tryCatchWrap = (someFunc) => async (req, res, next) => {
   try {
     return await someFunc(req, res, next);
@@ -39,24 +42,34 @@ const wrongPathHandler = (_, res, __) =>
     data: "Not found",
   });
 
-const createMessageToVerifacation = (req, verificationToken) => ({
-  to: req.body.email,
-  from: "epf.volodymyr@gmail.com",
-  subject: "Please verify your account",
-  text: `To confirm your email please click on the link ${
-    req.protocol
-  }://${req.get("host")}/api/users/verify/${verificationToken}`,
+const sendVerificationEmail = async (req, verificationToken) => {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-  html: `<p>To confirm your email please click on the <strong><a href='${
-    req.protocol
-  }://${req.get("host")}/api/users/verify/${
-    req.body.verificationToken
-  }'>link</a></strong></p>`,
-});
+  const msg = {
+    to: req.body.email,
+    from: "epf.volodymyr@gmail.com",
+    subject: "Please verify your account",
+    text: `To confirm your email please click on the link ${
+      req.protocol
+    }://${req.get("host")}/api/users/verify/${verificationToken}`,
+
+    html: `<p>To confirm your email please click on the <strong><a href='${
+      req.protocol
+    }://${req.get(
+      "host"
+    )}/api/users/verify/${verificationToken}'>link</a></strong></p>`,
+  };
+
+  try {
+    await sgMail.send(msg);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 module.exports = {
   tryCatchWrap,
   errorHandler,
   wrongPathHandler,
-  createMessageToVerifacation,
+  sendVerificationEmail,
 };

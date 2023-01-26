@@ -2,8 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const { nanoid } = require("nanoid");
-const sgMail = require("@sendgrid/mail");
 
+const { sendVerificationEmail } = require("../../helpers");
 const {
   registerUser,
   loginUser,
@@ -11,27 +11,15 @@ const {
   updateUserStatus,
   verifyUser,
 } = require("../../service/auth");
-const { createMessageToVerifacation } = require("../../helpers");
 
 const registrationController = async (req, res, next) => {
   req.body.verificationToken = nanoid();
   const user = await registerUser(req.body);
   user.avatarURL = gravatar.url(user.email, { s: 250 }, { protocol: "http" });
   await user.save();
+  await sendVerificationEmail(req, req.body.verificationToken);
 
-  const msg = createMessageToVerifacation(req, req.body.verificationToken);
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-  // try {
-  //   await sgMail.send(msg);
-  //   console.log("msg", msg);
-  //   console.log("Email sent");
-  // } catch (error) {
-  //   console.error(error);
-  // }
-
-  // return res.status(201).json({ user: user.userData() });
-  return res.status(201).json({ msg });
+  return res.status(201).json({ user: user.userData() });
 };
 
 const verifyUserController = async (req, res, next) => {
@@ -62,18 +50,8 @@ const repeatedVerification = async (req, res, next) => {
       .json({ message: "Verification has already been passed" });
   }
 
-  const msg = createMessageToVerifacation(req, user.verificationToken);
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-  // try {
-  //   await sgMail.send(msg);
-  //   console.log("msg", msg);
-  //   console.log("Email sent");
-  // } catch (error) {
-  //   console.error(error);
-  // }
-
-  return res.status(200).json({ message: "Verification email sent", msg });
+  await sendVerificationEmail(req, user.verificationToken);
+  return res.status(200).json({ message: "Verification email sent" });
 };
 
 const loginController = async (req, res, next) => {
@@ -120,6 +98,7 @@ const currentUserController = async (req, res, next) => {
 
 const updateUserStatusController = async (req, res, next) => {
   const updatedUser = await updateUserStatus(req.owner._id, req.body);
+
   if (!updatedUser) {
     return res.status(400).json({ message: "User not found" });
   }
