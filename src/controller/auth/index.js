@@ -1,25 +1,67 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
+const { nanoid } = require("nanoid");
 
+const { sendVerificationEmail } = require("../../helpers");
 const {
   registerUser,
   loginUser,
   findUser,
   updateUserStatus,
+  verifyUser,
 } = require("../../service/auth");
 
 const registrationController = async (req, res, next) => {
+  req.body.verificationToken = nanoid();
   const user = await registerUser(req.body);
   user.avatarURL = gravatar.url(user.email, { s: 250 }, { protocol: "http" });
   await user.save();
+  await sendVerificationEmail(req, req.body.verificationToken);
+
   return res.status(201).json({ user: user.userData() });
+};
+
+const verifyUserController = async (req, res, next) => {
+  const { verificationToken } = req.params;
+  const user = await verifyUser(verificationToken);
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  user.verificationToken = "-";
+  await user.save();
+  return res.status(200).json({ message: "Verification successful" });
+};
+
+const repeatedVerification = async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ message: "missing required field email" });
+  }
+  const user = await loginUser(email);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  if (user.verify) {
+    return res
+      .status(400)
+      .json({ message: "Verification has already been passed" });
+  }
+
+  await sendVerificationEmail(req, user.verificationToken);
+  return res.status(200).json({ message: "Verification email sent" });
 };
 
 const loginController = async (req, res, next) => {
   const user = await loginUser(req.body.email);
   if (!user) {
     return res.status(401).json({ message: "Email or password is wrong" });
+  }
+
+  if (!user.verify) {
+    return res.status(401).json({ message: "Please verificate your account" });
   }
 
   const verifyPassword = await bcrypt.compare(req.body.password, user.password);
@@ -56,6 +98,7 @@ const currentUserController = async (req, res, next) => {
 
 const updateUserStatusController = async (req, res, next) => {
   const updatedUser = await updateUserStatus(req.owner._id, req.body);
+
   if (!updatedUser) {
     return res.status(400).json({ message: "User not found" });
   }
@@ -68,4 +111,6 @@ module.exports = {
   logOutController,
   currentUserController,
   updateUserStatusController,
+  verifyUserController,
+  repeatedVerification,
 };

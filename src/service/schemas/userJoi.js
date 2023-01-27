@@ -17,4 +17,13 @@ const userUpdateSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
-module.exports = { userRegSchema, userLoginSchema, userUpdateSchema };
+const userVerificationRequestSchema = Joi.object({
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
+});
+
+module.exports = {
+  userRegSchema,
+  userLoginSchema,
+  userUpdateSchema,
+  userVerificationRequestSchema,
+};

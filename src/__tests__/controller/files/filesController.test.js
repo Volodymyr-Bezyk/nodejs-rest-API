@@ -1,4 +1,4 @@
-const User = require("../../../service/schemas/user");
+const User = require("../../../models/user");
 const { uploadUserAvatarController } = require("../../../controller/files");
 
 describe("Test files controller", () => {
@@ -25,24 +25,24 @@ describe("Test files controller", () => {
     };
     mRes = { status: jest.fn(() => mRes), json: jest.fn((msg) => msg) };
     mNext = jest.fn();
-    findByIdServiceSpy = User["findById"] = jest.fn(() => mUser);
+    findByIdServiceSpy = User.findById = jest.fn(() => mUser);
   });
   test("should uploadUserAvatarController save avatar", async () => {
     await uploadUserAvatarController(mReq, mRes, mNext);
 
-    await expect(findByIdServiceSpy).toBeCalled();
+    await expect(findByIdServiceSpy).toHaveBeenCalled();
     expect(findByIdServiceSpy).toHaveReturnedWith(mUser);
     expect(mReq.avatarURL).toBe();
-    expect(mUser.save).toBeCalled();
+    expect(mUser.save).toHaveBeenCalled();
     expect(mRes.status).toHaveBeenCalledWith(200);
     expect(mRes.json).toHaveBeenCalled();
   });
 
   test("should uploadUserAvatarController call 401 response if user not found", async () => {
-    const findByIdServiceSpy = (User["findById"] = jest.fn(() => null));
+    const findByIdServiceSpy = (User.findById = jest.fn(() => null));
     await uploadUserAvatarController(mReq, mRes, mNext);
 
-    await expect(findByIdServiceSpy).toBeCalled();
+    await expect(findByIdServiceSpy).toHaveBeenCalled();
     expect(findByIdServiceSpy).toHaveReturnedWith(null);
     expect(mRes.status).toHaveBeenCalledWith(401);
     expect(mRes.json).toHaveBeenCalled();
