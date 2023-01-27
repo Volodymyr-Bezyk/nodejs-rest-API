@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server.js",
+    "start": "cross-env NODE_ENV=production node ./src/server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./src/server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js",
@@ -16,6 +16,7 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.0.3",
+    "eslint-plugin-jest": "^27.2.1",
     "express": "4.17.1",
     "gravatar": "^1.8.2",
     "jimp": "^0.16.2",

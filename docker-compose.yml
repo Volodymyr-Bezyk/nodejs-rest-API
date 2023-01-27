@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  nodeapi:
+    image: volodymyrbezyk/nodeapp:latest
+    container_name: node
+    volumes:
+      - "/public:/app/data"
+    env_file:
+      - .env
+    ports:
+      - $PORT:3000
+    restart: unless-stopped

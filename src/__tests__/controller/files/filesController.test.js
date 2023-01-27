@@ -1,4 +1,4 @@
-const User = require("../../../service/schemas/user");
+const User = require("../../../models/user");
 const { uploadUserAvatarController } = require("../../../controller/files");
 
 describe("Test files controller", () => {

@@ -97,6 +97,7 @@ describe("Test verification email sending", () => {
   test("should send email", async () => {
     await sendVerificationEmail(mReq, verificationToken);
     expect(sgMail.setApiKey).toBeCalled();
+    expect(sgMail.send).toBeCalled();
   });
 
   test("should catch Error if email doesn`t send", async () => {

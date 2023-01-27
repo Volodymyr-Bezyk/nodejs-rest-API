@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
-const User = require("../../../service/schemas/user");
+const User = require("../../../models/user");
 const { sendVerificationEmail } = require("../../../helpers");
 
 const {

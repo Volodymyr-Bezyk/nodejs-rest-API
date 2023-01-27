@@ -1,4 +1,4 @@
-const Contact = require("../schemas/contact");
+const Contact = require("../../models/contact");
 
 const getContacts = async (owner, skip, pageLimit, favorite) =>
   await Contact.find({

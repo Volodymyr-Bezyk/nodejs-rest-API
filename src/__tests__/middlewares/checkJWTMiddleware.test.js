@@ -1,6 +1,6 @@
 const { checkJwt } = require("../../middlewares/checkJWT");
 const jwt = require("jsonwebtoken");
-const User = require("../../service/schemas/user");
+const User = require("../../models/user");
 require("dotenv").config();
 
 describe("Test checkJWT Middleware with correct params", () => {

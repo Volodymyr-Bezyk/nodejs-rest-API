@@ -1,4 +1,4 @@
-const Contact = require("../../../service/schemas/contact");
+const Contact = require("../../../models/contact");
 const {
   getContactsController,
   getContactByIdController,

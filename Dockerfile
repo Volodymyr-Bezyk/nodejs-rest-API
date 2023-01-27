@@ -12,4 +12,6 @@ ENV PORT 3000
 
 EXPOSE $PORT 
 
-CMD ["node", "src/server.js"]
+VOLUME ["/app/data"]
+
+CMD ["npm", "start"]
