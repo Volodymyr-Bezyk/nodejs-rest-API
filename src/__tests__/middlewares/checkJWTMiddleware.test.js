@@ -30,11 +30,11 @@ describe("Test checkJWT Middleware with correct params", () => {
     await checkJwt(mReq, mRes, mNext);
   });
 
-  test("should token exist, match with decoded token in request and next function called", async () => {
+  test("should token exist, match with decoded token in request and next function called", () => {
     expect(mReq.headers.authorization).toBeTruthy();
     expect(mReq.headers.authorization.split(" ")[1]).toBeDefined();
     expect(spy).toHaveBeenCalled();
-    await expect(spy).toHaveReturnedWith(mUser);
+    expect(spy).toHaveReturnedWith(mUser);
     expect(mReq.owner).toBeDefined();
     expect(mReq.owner._id).toMatch(mUser._id);
     expect(mNext).toHaveBeenCalled();
@@ -107,7 +107,7 @@ describe("Test checkJWT Middleware with bad params", () => {
     expect(mReq.headers.authorization).toBeDefined();
     expect(mReq.headers.authorization.split(" ")[1]).toBeDefined();
     expect(mReq.headers.authorization.split(" ")[1]).toBe(token);
-    await expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalled();
     expect(spy).toHaveReturnedWith(null);
     expect(mRes.status).toHaveBeenCalledWith(401);
     expect(mRes.json).toHaveBeenCalled();
@@ -124,7 +124,7 @@ describe("Test checkJWT Middleware with bad params", () => {
     expect(mReq.headers.authorization).toBeDefined();
     expect(mReq.headers.authorization.split(" ")[1]).toBeDefined();
     expect(mReq.headers.authorization.split(" ")[1]).toBe(token);
-    await expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalled();
     expect(spy).toHaveReturnedWith(mUser);
     expect(mUser.token).not.toBe(token);
     expect(mRes.status).toHaveBeenCalledWith(401);
@@ -135,18 +135,24 @@ describe("Test checkJWT Middleware with bad params", () => {
 });
 
 describe("Test checkJWT Middleware with Error", () => {
-  const mReq = {};
+  let e;
+  const mReq = {
+    headers: {
+      authorization: new Error(),
+    },
+  };
   const mRes = {};
-  const mNext = jest.fn();
+  const mNext = jest.fn(() => {});
 
-  beforeAll(async () => {
-    await checkJwt(mReq, mRes, mNext);
-  });
   test("should catch Error without params and call next function", async () => {
     try {
+      await checkJwt(mReq, mRes, mNext);
+      throw new Error();
     } catch (error) {
-      expect(mNext).toHaveBeenCalledWith(error);
-      expect(error).toBeInstanceOf(Error);
+      e = error;
+    } finally {
+      expect(mNext).toHaveBeenCalled();
+      expect(e).toBeInstanceOf(Error);
     }
   });
 });

@@ -9,7 +9,8 @@ const {
 } = require("../../../controller/api");
 
 describe("Test api controllers", () => {
-  let mReq,
+  let e,
+    mReq,
     mRes,
     mNext,
     getAllContactsServiceSpy,
@@ -61,7 +62,7 @@ describe("Test api controllers", () => {
     test("should getContactsController return contacts", async () => {
       await getContactsController(mReq, mRes, mNext);
 
-      await expect(getAllContactsServiceSpy).toHaveBeenCalled();
+      expect(getAllContactsServiceSpy).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(200);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -70,7 +71,9 @@ describe("Test api controllers", () => {
       try {
         await getContactsController();
       } catch (error) {
-        expect(error).toBeInstanceOf(Error);
+        e = error;
+      } finally {
+        expect(e).toBeInstanceOf(Error);
       }
     });
   });
@@ -79,7 +82,7 @@ describe("Test api controllers", () => {
     test("should getContactByIdController return contact", async () => {
       await getContactByIdController(mReq, mRes, mNext);
 
-      await expect(getOneContactServiceSpy).toHaveBeenCalled();
+      expect(getOneContactServiceSpy).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(200);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -88,7 +91,7 @@ describe("Test api controllers", () => {
       const getOneContactServiceSpy = (Contact.findOne = jest.fn(() => null));
       await getContactByIdController(mReq, mRes, mNext);
 
-      await expect(getOneContactServiceSpy).toHaveBeenCalled();
+      expect(getOneContactServiceSpy).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(404);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -97,7 +100,9 @@ describe("Test api controllers", () => {
       try {
         await getContactByIdController();
       } catch (error) {
-        expect(error).toBeInstanceOf(Error);
+        e = error;
+      } finally {
+        expect(e).toBeInstanceOf(Error);
       }
     });
   });
@@ -106,7 +111,7 @@ describe("Test api controllers", () => {
     test("should addContactController create new contact", async () => {
       await addContactController(mReq, mRes, mNext);
 
-      await expect(addContactServiceSpy).toHaveBeenCalled();
+      expect(addContactServiceSpy).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(201);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -115,7 +120,9 @@ describe("Test api controllers", () => {
       try {
         await addContactController();
       } catch (error) {
-        expect(error).toBeInstanceOf(Error);
+        e = error;
+      } finally {
+        expect(e).toBeInstanceOf(Error);
       }
     });
   });
@@ -124,7 +131,7 @@ describe("Test api controllers", () => {
     test("should deleteContactController delete contact", async () => {
       await deleteContactController(mReq, mRes, mNext);
 
-      await expect(deleteContactServiceSpy).toHaveBeenCalled();
+      expect(deleteContactServiceSpy).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(200);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -135,7 +142,7 @@ describe("Test api controllers", () => {
       ));
       await deleteContactController(mReq, mRes, mNext);
 
-      await expect(deleteContactServiceSpy).toHaveBeenCalled();
+      expect(deleteContactServiceSpy).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(404);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -144,7 +151,9 @@ describe("Test api controllers", () => {
       try {
         await deleteContactController();
       } catch (error) {
-        expect(error).toBeInstanceOf(Error);
+        e = error;
+      } finally {
+        expect(e).toBeInstanceOf(Error);
       }
     });
   });
@@ -153,7 +162,7 @@ describe("Test api controllers", () => {
     test("should replaceContactController replace contact", async () => {
       await replaceContactController(mReq, mRes, mNext);
 
-      await expect(replaceContactServiceSpy).toHaveBeenCalled();
+      expect(replaceContactServiceSpy).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(200);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -163,7 +172,7 @@ describe("Test api controllers", () => {
       ));
       await replaceContactController(mReq, mRes, mNext);
 
-      await expect(replaceContactServiceSpy).toHaveBeenCalled();
+      expect(replaceContactServiceSpy).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(404);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -172,7 +181,9 @@ describe("Test api controllers", () => {
       try {
         await replaceContactController();
       } catch (error) {
-        expect(error).toBeInstanceOf(Error);
+        e = error;
+      } finally {
+        expect(e).toBeInstanceOf(Error);
       }
     });
   });
@@ -181,7 +192,7 @@ describe("Test api controllers", () => {
     test("should updateContactController update contact status", async () => {
       await updateContactController(mReq, mRes, mNext);
 
-      await expect(updateStatusContactServiceSpy).toHaveBeenCalled();
+      expect(updateStatusContactServiceSpy).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(200);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -191,7 +202,7 @@ describe("Test api controllers", () => {
       ));
       await updateContactController(mReq, mRes, mNext);
 
-      await expect(updateStatusContactServiceSpy).toHaveBeenCalled();
+      expect(updateStatusContactServiceSpy).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(404);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -200,7 +211,9 @@ describe("Test api controllers", () => {
       try {
         await updateContactController();
       } catch (error) {
-        expect(error).toBeInstanceOf(Error);
+        e = error;
+      } finally {
+        expect(e).toBeInstanceOf(Error);
       }
     });
   });
