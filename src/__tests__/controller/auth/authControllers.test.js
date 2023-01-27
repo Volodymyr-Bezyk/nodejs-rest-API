@@ -68,10 +68,10 @@ describe("Test auth controllers", () => {
     mRes = { status: jest.fn(() => mRes), json: jest.fn((msg) => msg) };
     mNext = jest.fn(() => {});
 
-    createUserServiceSpy = User["create"] = jest.fn(() => mUser);
-    findOneServiceSpy = User["findOne"] = jest.fn(() => mUser);
-    findByIdServiceSpy = User["findById"] = jest.fn(() => mUser);
-    findOneAndUpdateServiceSpy = User["findOneAndUpdate"] = jest.fn(
+    createUserServiceSpy = User.create = jest.fn(() => mUser);
+    findOneServiceSpy = User.findOne = jest.fn(() => mUser);
+    findByIdServiceSpy = User.findById = jest.fn(() => mUser);
+    findOneAndUpdateServiceSpy = User.findOneAndUpdate = jest.fn(
       () => mUser
     );
     sendVerificationEmail.mockImplementation();
@@ -82,11 +82,11 @@ describe("Test auth controllers", () => {
       await registrationController(mReq, mRes, mNext);
 
       expect(mReq.body.verificationToken).toBeDefined();
-      await expect(createUserServiceSpy).toBeCalled();
+      await expect(createUserServiceSpy).toHaveBeenCalled();
       expect(createUserServiceSpy).toHaveReturnedWith(mUser);
       expect(mUser.avatarURL).toBeDefined();
-      await expect(mUser.save).toBeCalled();
-      await expect(sendVerificationEmail).toBeCalledTimes(1);
+      await expect(mUser.save).toHaveBeenCalled();
+      await expect(sendVerificationEmail).toHaveBeenCalledTimes(1);
       expect(mRes.status).toHaveBeenCalledWith(201);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -97,21 +97,21 @@ describe("Test auth controllers", () => {
       await verifyUserController(mReq, mRes, mNext);
 
       expect(mReq.params.verificationToken).toBeDefined();
-      await expect(findOneAndUpdateServiceSpy).toBeCalled();
+      await expect(findOneAndUpdateServiceSpy).toHaveBeenCalled();
       expect(mUser.verificationToken).toBe("-");
-      await expect(mUser.save).toBeCalled();
+      await expect(mUser.save).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(200);
       expect(mRes.json).toHaveBeenCalled();
     });
 
     test("should the verification will be failed with 404 response if user not found", async () => {
-      const findOneAndUpdateServiceSpy = (User["findOneAndUpdate"] = jest.fn(
+      const findOneAndUpdateServiceSpy = (User.findOneAndUpdate = jest.fn(
         () => null
       ));
       await verifyUserController(mReq, mRes, mNext);
 
       expect(mReq.params.verificationToken).toBeDefined();
-      await expect(findOneAndUpdateServiceSpy).toBeCalled();
+      await expect(findOneAndUpdateServiceSpy).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(404);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -122,8 +122,8 @@ describe("Test auth controllers", () => {
       await repeatedVerification(mReq, mRes, mNext);
 
       expect(mReq.body.email).toBeDefined();
-      await expect(findOneServiceSpy).toBeCalled();
-      await expect(sendVerificationEmail).toBeCalled();
+      await expect(findOneServiceSpy).toHaveBeenCalled();
+      await expect(sendVerificationEmail).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(200);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -138,11 +138,11 @@ describe("Test auth controllers", () => {
     });
 
     test("should re-verification will be failed with 404 response if user not found", async () => {
-      const findOneServiceSpy = (User["findOne"] = jest.fn(() => null));
+      const findOneServiceSpy = (User.findOne = jest.fn(() => null));
       await repeatedVerification(mReq, mRes, mNext);
 
       expect(mReq.body.email).toBeDefined();
-      await expect(findOneServiceSpy).toBeCalled();
+      await expect(findOneServiceSpy).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(404);
       expect(mRes.json).toHaveBeenCalled();
     });
@@ -152,7 +152,7 @@ describe("Test auth controllers", () => {
       await repeatedVerification(mReq, mRes, mNext);
 
       expect(mReq.body.email).toBeDefined();
-      await expect(findOneServiceSpy).toBeCalled();
+      await expect(findOneServiceSpy).toHaveBeenCalled();
       expect(mUser.verify).toBe(true);
       expect(mRes.status).toHaveBeenCalledWith(400);
       expect(mRes.json).toHaveBeenCalled();
@@ -165,8 +165,8 @@ describe("Test auth controllers", () => {
       mUser.verify = true;
       const result = await loginController(mReq, mRes, mNext);
 
-      await expect(findOneServiceSpy).toBeCalled();
-      expect(mUser.save).toBeCalled();
+      await expect(findOneServiceSpy).toHaveBeenCalled();
+      expect(mUser.save).toHaveBeenCalled();
       expect(mUser.token).toBeDefined();
       expect(mRes.status).toHaveBeenCalledWith(200);
       expect(mRes.json).toHaveBeenCalled();
@@ -178,10 +178,10 @@ describe("Test auth controllers", () => {
     });
 
     test("should loginController call 401 response if user not found", async () => {
-      const findOneServiceSpy = (User["findOne"] = jest.fn(() => null));
+      const findOneServiceSpy = (User.findOne = jest.fn(() => null));
       await loginController(mReq, mRes, mNext);
 
-      await expect(findOneServiceSpy).toBeCalled();
+      await expect(findOneServiceSpy).toHaveBeenCalled();
       expect(findOneServiceSpy).toHaveReturnedWith(null);
       expect(mRes.status).toHaveBeenCalledWith(401);
       expect(mRes.json).toHaveBeenCalled();
@@ -191,7 +191,7 @@ describe("Test auth controllers", () => {
       mReq.body.password = "111";
       await loginController(mReq, mRes, mNext);
 
-      await expect(findOneServiceSpy).toBeCalled();
+      await expect(findOneServiceSpy).toHaveBeenCalled();
       expect(findOneServiceSpy).toHaveReturnedWith(mUser);
       expect(mRes.status).toHaveBeenCalledWith(401);
       expect(mRes.json).toHaveBeenCalled();
@@ -211,19 +211,19 @@ describe("Test auth controllers", () => {
       mReq.owner._id = "63c3fe510ecf57dade39f3eb";
       await logOutController(mReq, mRes, mNext);
 
-      await expect(findByIdServiceSpy).toBeCalled();
+      await expect(findByIdServiceSpy).toHaveBeenCalled();
       expect(findByIdServiceSpy).toHaveReturnedWith(mUser);
       expect(mReq.token).toBeFalsy();
-      expect(mUser.save).toBeCalled();
+      expect(mUser.save).toHaveBeenCalled();
       expect(mRes.status).toHaveBeenCalledWith(204);
       expect(mRes.json).toHaveBeenCalled();
     });
 
-    test("should logOutController call 401 response if user not found ", async () => {
-      const findByIdServiceSpy = (User["findById"] = jest.fn(() => null));
+    test("should logOutController call 401 response if user not found", async () => {
+      const findByIdServiceSpy = (User.findById = jest.fn(() => null));
       await logOutController(mReq, mRes, mNext);
 
-      await expect(findByIdServiceSpy).toBeCalled();
+      await expect(findByIdServiceSpy).toHaveBeenCalled();
       expect(findByIdServiceSpy).toHaveReturnedWith(null);
       expect(mRes.status).toHaveBeenCalledWith(401);
       expect(mRes.json).toHaveBeenCalled();
@@ -250,10 +250,10 @@ describe("Test auth controllers", () => {
     });
 
     test("should currentUserController call 401 response if user not found", async () => {
-      const findByIdServiceSpy = (User["findById"] = jest.fn(() => null));
+      const findByIdServiceSpy = (User.findById = jest.fn(() => null));
       await currentUserController(mReq, mRes, mNext);
 
-      await expect(findByIdServiceSpy).toBeCalled();
+      await expect(findByIdServiceSpy).toHaveBeenCalled();
       expect(findByIdServiceSpy).toHaveReturnedWith(null);
       expect(mRes.status).toHaveBeenCalledWith(401);
       expect(mRes.json).toHaveBeenCalled();
@@ -268,12 +268,12 @@ describe("Test auth controllers", () => {
     });
   });
 
-  describe("Test update User status controller ", () => {
+  describe("Test update User status controller", () => {
     test("should updateUserStatusController update user", async () => {
       mReq.owner._id = "63c3fe510ecf57dade39f3eb";
       await updateUserStatusController(mReq, mRes, mNext);
 
-      expect(findOneAndUpdateServiceSpy).toBeCalled();
+      expect(findOneAndUpdateServiceSpy).toHaveBeenCalled();
       expect(findOneAndUpdateServiceSpy).toHaveReturnedWith(mUser);
 
       expect(mRes.status).toHaveBeenCalledWith(200);
@@ -281,12 +281,12 @@ describe("Test auth controllers", () => {
     });
 
     test("should updateUserStatusController call 401 response if user not found", async () => {
-      const findOneAndUpdateServiceSpy = (User["findOneAndUpdate"] = jest.fn(
+      const findOneAndUpdateServiceSpy = (User.findOneAndUpdate = jest.fn(
         () => null
       ));
       await updateUserStatusController(mReq, mRes, mNext);
 
-      await expect(findOneAndUpdateServiceSpy).toBeCalled();
+      await expect(findOneAndUpdateServiceSpy).toHaveBeenCalled();
       expect(findOneAndUpdateServiceSpy).toHaveReturnedWith(null);
       expect(mRes.status).toHaveBeenCalledWith(400);
       expect(mRes.json).toHaveBeenCalled();

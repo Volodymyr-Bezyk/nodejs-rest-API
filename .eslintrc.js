@@ -7,7 +7,7 @@ module.exports = {
     "jest/globals": true,
   },
 
-  extends: ["standard", "prettier", "jest", "plugin:jest/recommended"],
+  extends: ["standard", "prettier", "plugin:jest/recommended"],
   parserOptions: {
     ecmaVersion: 12,
   },

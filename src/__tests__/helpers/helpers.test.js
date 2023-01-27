@@ -18,11 +18,11 @@ describe("Test tryCatchWrap function", () => {
     expect(typeof result).toBe("function");
   });
 
-  test("should tryCatchWrap catch Error and call Next without params ", () => {
+  test("should tryCatchWrap catch Error and call Next without params", () => {
     try {
       tryCatchWrap();
     } catch (error) {
-      expect(mNext).toBeCalled();
+      expect(mNext).toHaveBeenCalled();
       expect(error).toBeInstanceOf(Error);
     }
   });
@@ -96,8 +96,8 @@ describe("Test verification email sending", () => {
   const verificationToken = nanoid();
   test("should send email", async () => {
     await sendVerificationEmail(mReq, verificationToken);
-    expect(sgMail.setApiKey).toBeCalled();
-    expect(sgMail.send).toBeCalled();
+    expect(sgMail.setApiKey).toHaveBeenCalled();
+    expect(sgMail.send).toHaveBeenCalled();
   });
 
   test("should catch Error if email doesn`t send", async () => {

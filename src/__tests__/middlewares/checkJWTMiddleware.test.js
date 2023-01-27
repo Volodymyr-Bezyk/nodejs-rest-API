@@ -26,11 +26,11 @@ describe("Test checkJWT Middleware with correct params", () => {
   let spy;
 
   beforeEach(async () => {
-    spy = User["findById"] = jest.fn(() => mUser);
+    spy = User.findById = jest.fn(() => mUser);
     await checkJwt(mReq, mRes, mNext);
   });
 
-  test("should token exist, match with decoded token in request and next function called ", async () => {
+  test("should token exist, match with decoded token in request and next function called", async () => {
     expect(mReq.headers.authorization).toBeTruthy();
     expect(mReq.headers.authorization.split(" ")[1]).toBeDefined();
     expect(spy).toHaveBeenCalled();
@@ -118,7 +118,7 @@ describe("Test checkJWT Middleware with bad params", () => {
 
   test("should call 401 response when token not equal user token", async () => {
     mReq.headers.authorization = `Bearer ${token}`;
-    const spy = (User["findById"] = jest.fn(() => mUser));
+    const spy = (User.findById = jest.fn(() => mUser));
     await checkJwt(mReq, mRes, mNext);
 
     expect(mReq.headers.authorization).toBeDefined();
@@ -130,7 +130,7 @@ describe("Test checkJWT Middleware with bad params", () => {
     expect(mRes.status).toHaveBeenCalledWith(401);
     expect(mRes.json).toHaveBeenCalled();
     expect(mRes.json).toHaveReturnedWith(noAuthorizedResponse);
-    expect(mNext).not.toBeCalled();
+    expect(mNext).not.toHaveBeenCalled();
   });
 });
 

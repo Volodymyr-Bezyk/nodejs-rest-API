@@ -43,19 +43,19 @@ describe("Test api controllers", () => {
         }),
       }));
 
-    getOneContactServiceSpy = Contact["findOne"] = jest.fn(() => ({
+    getOneContactServiceSpy = Contact.findOne = jest.fn(() => ({
       contact: {},
     }));
-    addContactServiceSpy = Contact["create"] = jest.fn(() => ({ contact: {} }));
-    deleteContactServiceSpy = Contact["findOneAndRemove"] = jest.fn(() => ({
+    addContactServiceSpy = Contact.create = jest.fn(() => ({ contact: {} }));
+    deleteContactServiceSpy = Contact.findOneAndRemove = jest.fn(() => ({
       contact: {},
     }));
-    replaceContactServiceSpy = Contact["findOneAndReplace"] = jest.fn(() => ({
+    replaceContactServiceSpy = Contact.findOneAndReplace = jest.fn(() => ({
       contact: {},
     }));
-    updateStatusContactServiceSpy = Contact["findOneAndUpdate"] = jest.fn(
-      () => ({ contact: {} })
-    );
+    updateStatusContactServiceSpy = Contact.findOneAndUpdate = jest.fn(() => ({
+      contact: {},
+    }));
   });
   describe("Test getContactsController", () => {
     test("should getContactsController return contacts", async () => {
@@ -85,9 +85,7 @@ describe("Test api controllers", () => {
     });
 
     test("should getContactByIdController call 401 response if contact not found", async () => {
-      const getOneContactServiceSpy = (Contact["findOne"] = jest.fn(
-        () => null
-      ));
+      const getOneContactServiceSpy = (Contact.findOne = jest.fn(() => null));
       await getContactByIdController(mReq, mRes, mNext);
 
       await expect(getOneContactServiceSpy).toHaveBeenCalled();
@@ -131,8 +129,8 @@ describe("Test api controllers", () => {
       expect(mRes.json).toHaveBeenCalled();
     });
 
-    test("should deleteContactController call 404 response if contact not found ", async () => {
-      const deleteContactServiceSpy = (Contact["findOneAndRemove"] = jest.fn(
+    test("should deleteContactController call 404 response if contact not found", async () => {
+      const deleteContactServiceSpy = (Contact.findOneAndRemove = jest.fn(
         () => null
       ));
       await deleteContactController(mReq, mRes, mNext);
@@ -160,7 +158,7 @@ describe("Test api controllers", () => {
       expect(mRes.json).toHaveBeenCalled();
     });
     test("should replaceContactController call 404 response if contact not found", async () => {
-      const replaceContactServiceSpy = (Contact["findOneAndReplace"] = jest.fn(
+      const replaceContactServiceSpy = (Contact.findOneAndReplace = jest.fn(
         () => null
       ));
       await replaceContactController(mReq, mRes, mNext);
@@ -188,8 +186,9 @@ describe("Test api controllers", () => {
       expect(mRes.json).toHaveBeenCalled();
     });
     test("should updateContactController call 404 response if contact not found", async () => {
-      const updateStatusContactServiceSpy = (Contact["findOneAndUpdate"] =
-        jest.fn(() => null));
+      const updateStatusContactServiceSpy = (Contact.findOneAndUpdate = jest.fn(
+        () => null
+      ));
       await updateContactController(mReq, mRes, mNext);
 
       await expect(updateStatusContactServiceSpy).toHaveBeenCalled();
