@@ -2,7 +2,7 @@ const User = require("../../../models/user");
 const { uploadUserAvatarController } = require("../../../controller/files");
 
 describe("Test files controller", () => {
-  let mUser, mReq, mRes, mNext, findByIdServiceSpy;
+  let e, mUser, mReq, mRes, mNext, findByIdServiceSpy;
 
   beforeEach(() => {
     mUser = {
@@ -30,7 +30,7 @@ describe("Test files controller", () => {
   test("should uploadUserAvatarController save avatar", async () => {
     await uploadUserAvatarController(mReq, mRes, mNext);
 
-    await expect(findByIdServiceSpy).toHaveBeenCalled();
+    expect(findByIdServiceSpy).toHaveBeenCalled();
     expect(findByIdServiceSpy).toHaveReturnedWith(mUser);
     expect(mReq.avatarURL).toBe();
     expect(mUser.save).toHaveBeenCalled();
@@ -42,7 +42,7 @@ describe("Test files controller", () => {
     const findByIdServiceSpy = (User.findById = jest.fn(() => null));
     await uploadUserAvatarController(mReq, mRes, mNext);
 
-    await expect(findByIdServiceSpy).toHaveBeenCalled();
+    expect(findByIdServiceSpy).toHaveBeenCalled();
     expect(findByIdServiceSpy).toHaveReturnedWith(null);
     expect(mRes.status).toHaveBeenCalledWith(401);
     expect(mRes.json).toHaveBeenCalled();
@@ -53,7 +53,9 @@ describe("Test files controller", () => {
       await uploadUserAvatarController(mReq, mRes, mNext);
       throw new Error();
     } catch (error) {
-      expect(error).toBeInstanceOf(Error);
+      e = error;
+    } finally {
+      expect(e).toBeInstanceOf(Error);
     }
   });
 });

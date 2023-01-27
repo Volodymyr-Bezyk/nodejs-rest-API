@@ -13,18 +13,11 @@ describe("Test tryCatchWrap function", () => {
   const mReq = jest.fn(() => {});
   const mRes = { status: jest.fn(() => mRes), json: jest.fn((msg) => msg) };
   const mNext = jest.fn(() => {});
+  const fakeFunc = jest.fn();
   test("should tryCatchWrap will return function", () => {
-    const result = tryCatchWrap(mReq, mRes, mNext);
+    const result = tryCatchWrap(fakeFunc);
+    result(mReq, mRes, mNext);
     expect(typeof result).toBe("function");
-  });
-
-  test("should tryCatchWrap catch Error and call Next without params", () => {
-    try {
-      tryCatchWrap();
-    } catch (error) {
-      expect(mNext).toHaveBeenCalled();
-      expect(error).toBeInstanceOf(Error);
-    }
   });
 });
 
@@ -32,7 +25,8 @@ describe("Test errorHandler function", () => {
   let err, mReq, mRes, mNext;
 
   beforeEach(() => {
-    (err = new Error()), (mReq = jest.fn(() => {}));
+    err = new Error();
+    mReq = jest.fn();
     mReq = jest.fn();
     mRes = { status: jest.fn(() => mRes), json: jest.fn((msg) => msg) };
     mNext = jest.fn(() => {});
@@ -87,6 +81,7 @@ describe("Test wrong path error", () => {
 });
 
 describe("Test verification email sending", () => {
+  let e;
   const mReq = {
     body: {
       email: "replex@gmail.com",
@@ -104,7 +99,9 @@ describe("Test verification email sending", () => {
     try {
       await sendVerificationEmail();
     } catch (error) {
-      expect(error).toBeInstanceOf(Error);
+      e = error;
+    } finally {
+      expect(e).toBeInstanceOf(Error);
     }
   });
 });

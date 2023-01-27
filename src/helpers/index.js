@@ -3,8 +3,10 @@ require("dotenv").config();
 
 const tryCatchWrap = (someFunc) => async (req, res, next) => {
   try {
+    console.log("111111111111");
     return await someFunc(req, res, next);
   } catch (error) {
+    console.log("222222222222");
     next(error);
   }
 };
